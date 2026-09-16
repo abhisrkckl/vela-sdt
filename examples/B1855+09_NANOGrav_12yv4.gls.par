@@ -1,0 +1,66 @@
+PSR              B1855+09
+LAMBDA   286.8634874759636  1     0.0000000120871
+BETA      32.3214851773070  1     0.0000000190648
+PMLAMBDA           -3.2685  1              0.0092
+PMBETA             -5.0604  1              0.0176
+PX                  0.7149  1              0.1217
+POSEPOCH        55637.0000
+F0    186.4940812354548996  1  0.0000000000047889
+F1     -6.204791865029D-16  1  2.855227959554D-20
+PEPOCH        55637.000000
+START            53358.726
+FINISH           57915.276
+DM               13.313704  1
+DM1                      0  1
+DM2                      0  1
+FD1  1.08328810D-04  1      1.58206697D-05
+FD2 -1.22195906D-04  1      1.92718770D-05
+FD3  6.51517794D-05  1      1.16423594D-05
+SOLARN0               0.00
+EPHEM               DE436
+ECL                 IERS2010
+CLK                 TT(BIPM2017)                    
+UNITS               TDB
+TIMEEPH             FB90
+T2CMETHOD           TEMPO
+CORRECT_TROPOSPHERE N
+PLANET_SHAPIRO      N
+DILATEFREQ          N
+NTOA                  6464
+TRES                  1.28
+TZRMJD  55638.45920097032105
+TZRFRQ            1410.000
+TZRSITE                  AO
+MODE                     1
+NITS 1
+INFO -f                              
+BINARY            ELL1    
+A1             9.230780114  1         0.000000179
+PB       12.32717119153275  1    0.00000000015598
+TASC       55631.710921359  1         0.000000018
+EPS1         -0.0000215485  1        0.0000000195
+EPS2          0.0000024310  1        0.0000000128
+SINI              0.999100  1            0.000207
+M2                0.254144  1            0.010070
+T2EFAC -f 430_ASP   1.150           1
+T2EFAC -f 430_PUPPI   1.042         1
+T2EFAC -f L-wide_ASP   1.073        1
+T2EFAC -f L-wide_PUPPI   1.244      1
+T2EQUAD -f 430_ASP   0.08167        1
+T2EQUAD -f 430_PUPPI   0.51805      1
+T2EQUAD -f L-wide_ASP   0.31293     1
+T2EQUAD -f L-wide_PUPPI   0.01050   1
+ECORR -f 430_ASP   0.00318          1
+ECORR -f 430_PUPPI   1.83365        1
+ECORR -f L-wide_ASP   0.83016       1
+ECORR -f L-wide_PUPPI   0.25126     1
+JUMP -fe L-wide      -0.000020230   1       0.000004445
+TNREDAMP    -14     1
+TNREDGAM    3       1
+TNREDC      16
+TNDMAMP    -14     1
+TNDMGAM    3       1
+TNDMC      32
+# Converted by make_release.py on Thu Aug  8 16:24:17 2019 by pdemores
+# Original filename: 'B1855+09/B1855+09.working.par'
+# Ran additional tempo iteration
