@@ -10,23 +10,33 @@ from pint.toa import TOAs
 
 import numpy as np
 
+
 class SPNTASubset(SPNTA):
-    def __init__(self, spnta: SPNTA, data_tempering_factor: float, ntoa_min: int, nmpar_min: int):
-        idxs = get_toas_subset_idxs(spnta.model_pint, spnta.toas_pint, data_tempering_factor, ntoa_min)
+    def __init__(
+        self, spnta: SPNTA, data_tempering_factor: float, ntoa_min: int, nmpar_min: int
+    ):
+        idxs = get_toas_subset_idxs(
+            spnta.model_pint, spnta.toas_pint, data_tempering_factor, ntoa_min
+        )
 
         toas = jl.Vector[vl.TOA]([spnta.toas[ii] for ii in idxs])
         self.toas_pint = spnta.toas_pint[idxs]
 
         self.model_pint = deepcopy(spnta.model_pint)
         for par in ["TNREDC", "TNDMC", "TNCHROMC"]:
-            if par in self.model_pint :
-                self.model_pint [par].value = max(
-                    int(round(self.model_pint [par].value * data_tempering_factor)), nmpar_min
+            if par in self.model_pint:
+                self.model_pint[par].value = max(
+                    int(round(self.model_pint[par].value * data_tempering_factor)),
+                    nmpar_min,
                 )
 
         if "EcorrNoise" in self.model_pint.components:
-            assert not self.toas_pint.is_wideband(), "ECORR is not supported for wideband data."
-            self.toas_pint, ecorr_toa_ranges, ecorr_indices = ecorr_sort(self.model_pint, self.toas_pint)
+            assert (
+                not self.toas_pint.is_wideband()
+            ), "ECORR is not supported for wideband data."
+            self.toas_pint, ecorr_toa_ranges, ecorr_indices = ecorr_sort(
+                self.model_pint, self.toas_pint
+            )
         else:
             ecorr_toa_ranges, ecorr_indices = None, None
 
