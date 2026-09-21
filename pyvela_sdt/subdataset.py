@@ -5,7 +5,7 @@ from pyvela import SPNTA, Vela as vl
 from pyvela.vela import jl
 from pyvela.model import pint_components_to_vela, get_kernel
 from pyvela.ecorr import ecorr_sort
-from pint.models import TimingModel
+from pint.models import TimingModel, PhaseOffset
 from pint.toa import TOAs
 
 import numpy as np
@@ -19,7 +19,24 @@ class SPNTASubset(SPNTA):
             spnta.model_pint, spnta.toas_pint, data_tempering_factor, ntoa_min
         )
 
-        toas = jl.Vector[vl.TOA]([spnta.toas[ii] for ii in idxs])
+        if not spnta.wideband:
+            toas = jl.Vector[vl.TOA](
+                [
+                    vl.TOA(
+                        spnta.toas[ii].value,
+                        spnta.toas[ii].error,
+                        spnta.toas[ii].observing_frequency,
+                        spnta.toas[ii].pulse_number,
+                        spnta.toas[ii].ephem,
+                        jj,
+                    )
+                    for jj, ii in enumerate(idxs)
+                ]
+            )
+        else:
+            raise NotImplementedError
+            # toas = jl.Vector[vl.WidebandTOA]([spnta.toas[ii] for ii in idxs])
+
         self.toas_pint = spnta.toas_pint[idxs]
 
         self.model_pint = deepcopy(spnta.model_pint)
@@ -29,6 +46,10 @@ class SPNTASubset(SPNTA):
                     int(round(self.model_pint[par].value * data_tempering_factor)),
                     nmpar_min,
                 )
+
+        if "PhaseOffset" not in self.model_pint:
+            self.model_pint.add_component(PhaseOffset())
+        self.model_pint["PHOFF"].frozen = False
 
         if "EcorrNoise" in self.model_pint.components:
             assert (
