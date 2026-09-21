@@ -43,7 +43,7 @@ class SDTSampler:
             print(len(spnta1.toas_pint))
             spntas.append(spnta1)
 
-            if len(spnta1.toas_pint) < self.minsize / self.data_tempering_factor:
+            if len(spnta1.toas_pint) < self.minsize / self.data_tempering_factor**0.5:
                 break
 
             spnta1 = SPNTASubset(
