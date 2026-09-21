@@ -29,7 +29,11 @@ class SDTSampler:
         self.ndim = self.spnta.ndim
         self.nwalkers = self.ndim * nwalkers_per_param
 
-        self.minsize = self.ntoa_min if "EFAC1" not in spnta.model_pint else self.ntoa_min * len(spnta.model_pint.EFACs)
+        self.minsize = (
+            self.ntoa_min
+            if "EFAC1" not in spnta.model_pint
+            else self.ntoa_min * len(spnta.model_pint.EFACs)
+        )
 
     @cached_property
     def spnta_subsets(self) -> List[SPNTA]:
@@ -45,7 +49,7 @@ class SDTSampler:
             spnta1 = SPNTASubset(
                 spnta1, self.data_tempering_factor, self.ntoa_min, self.nmpar_min
             )
-        
+
         spntas.reverse()
 
         return spntas

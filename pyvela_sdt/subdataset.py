@@ -88,7 +88,9 @@ class SPNTASubset(SPNTA):
         self.pulsar = vl.Pulsar(model, toas)
 
         self.analytic_marginalized_params = spnta.analytic_marginalized_params
-        self.analytic_marginalized_param_prior_stds = spnta.analytic_marginalized_param_prior_stds
+        self.analytic_marginalized_param_prior_stds = (
+            spnta.analytic_marginalized_param_prior_stds
+        )
 
 
 def get_toas_subset_idxs(
