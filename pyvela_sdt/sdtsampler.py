@@ -10,6 +10,8 @@ from pint.toa import TOAs
 
 from pyvela.spnta import SPNTA
 
+from .subdataset import SPNTASubset
+
 
 class SDTSampler:
     def __init__(
@@ -17,53 +19,33 @@ class SDTSampler:
         spnta: SPNTA,
         data_tempering_factor: float = 0.75,
         ntoa_min: int = 32,
+        nmpar_min: int = 4,
         nwalkers_per_param: int = 5,
     ):
         self.spnta = spnta
         self.data_tempering_factor = data_tempering_factor
         self.ntoa_min = ntoa_min
+        self.nmpar_min = nmpar_min
         self.ndim = self.spnta.ndim
         self.nwalkers = self.ndim * nwalkers_per_param
 
+        self.minsize = self.ntoa_min if "EFAC1" not in spnta.model_pint else self.ntoa_min * len(spnta.model_pint.EFACs)
+
     @cached_property
     def spnta_subsets(self) -> List[SPNTA]:
-        tzrtoa = self.spnta.model_pint.get_TZR_toa(self.spnta.toas_pint)
-        tzrtoa.compute_pulse_numbers(self.spnta.model_pint)
-
-        model_ = deepcopy(self.spnta.model_pint)
-
         spntas = []
         spnta1 = self.spnta
         while True:
             print(len(spnta1.toas_pint))
             spntas.append(spnta1)
-            toas1 = get_toas_subset(
-                self.spnta.model_pint_modified,
-                spnta1.toas_pint,
-                self.data_tempering_factor,
-                self.ntoa_min,
-            )
 
-            if toas1 is None:
+            if len(spnta1.toas_pint) < self.minsize / self.data_tempering_factor:
                 break
 
-            for par in ["TNREDC", "TNDMC", "TNCHROMC"]:
-                if par in model_:
-                    model_[par].value = max(
-                        int(round(model_[par].value * self.data_tempering_factor)), 4
-                    )
-
-            spnta1 = SPNTA.from_pint(
-                model_,
-                toas1,
-                analytic_marginalized_params=self.spnta.analytic_marginalized_params,
-                custom_priors=(
-                    self.spnta.custom_priors_dict
-                    if hasattr(self.spnta, "custom_priors_dict")
-                    else {}
-                ),
-                tzrtoa=tzrtoa,
+            spnta1 = SPNTASubset(
+                spnta1, self.data_tempering_factor, self.ntoa_min, self.nmpar_min
             )
+        
         spntas.reverse()
 
         return spntas

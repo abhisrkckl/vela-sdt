@@ -47,7 +47,7 @@ class SPNTASubset(SPNTA):
                     nmpar_min,
                 )
 
-        if "PhaseOffset" not in self.model_pint:
+        if "PhaseOffset" not in self.model_pint.components:
             self.model_pint.add_component(PhaseOffset())
         self.model_pint["PHOFF"].frozen = False
 
@@ -86,6 +86,9 @@ class SPNTASubset(SPNTA):
         )
 
         self.pulsar = vl.Pulsar(model, toas)
+
+        self.analytic_marginalized_params = spnta.analytic_marginalized_params
+        self.analytic_marginalized_param_prior_stds = spnta.analytic_marginalized_param_prior_stds
 
 
 def get_toas_subset_idxs(
