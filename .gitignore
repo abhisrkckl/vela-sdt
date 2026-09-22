@@ -220,3 +220,5 @@ __marimo__/
 examples/*_out/
 
 *.png
+
+*.pickle.gz
