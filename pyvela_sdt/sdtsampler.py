@@ -20,6 +20,7 @@ class SDTSampler:
         nwalkers_per_param: int = 5,
     ):
         self.spnta = spnta
+        self.model_pint = deepcopy(spnta.model_pint)
         self.data_tempering_factor = data_tempering_factor
         self.ntoa_min = ntoa_min
         self.ndim = self.spnta.ndim
@@ -38,7 +39,7 @@ class SDTSampler:
             print(len(spnta1.toas_pint))
             spntas.append(spnta1)
             toas1 = get_toas_subset(
-                self.spnta.model_pint_modified,
+                spnta1.model_pint,
                 spnta1.toas_pint,
                 self.data_tempering_factor,
                 self.ntoa_min,
