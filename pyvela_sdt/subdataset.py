@@ -15,7 +15,7 @@ class SPNTASubset(SPNTA):
     def __init__(
         self, spnta: SPNTA, data_tempering_factor: float, ntoa_min: int, nmpar_min: int
     ):
-        idxs = get_toas_subset_idxs(
+        self.idxs = get_toas_subset_idxs(
             spnta.model_pint, spnta.toas_pint, data_tempering_factor, ntoa_min
         )
 
@@ -30,14 +30,14 @@ class SPNTASubset(SPNTA):
                         spnta.toas[ii].ephem,
                         jj,
                     )
-                    for jj, ii in enumerate(idxs)
+                    for jj, ii in enumerate(self.idxs)
                 ]
             )
         else:
             raise NotImplementedError
             # toas = jl.Vector[vl.WidebandTOA]([spnta.toas[ii] for ii in idxs])
 
-        self.toas_pint = spnta.toas_pint[idxs]
+        self.toas_pint = spnta.toas_pint[self.idxs]
 
         self.model_pint = deepcopy(spnta.model_pint)
         for par in ["TNREDC", "TNDMC", "TNCHROMC"]:
@@ -69,7 +69,7 @@ class SPNTASubset(SPNTA):
             ecorr_toa_ranges,
             ecorr_indices,
             spnta.analytic_marginalized_params,
-            spnta.analytic_marginalized_param_prior_stds,
+            {},
         )
 
         model = vl.TimingModel(
